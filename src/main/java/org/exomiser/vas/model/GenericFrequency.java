@@ -1,5 +1,6 @@
 package org.exomiser.vas.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -41,7 +42,7 @@ public class GenericFrequency implements Frequency {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("source", source)
                 .add("frequency", frequency)
                 .toString();
