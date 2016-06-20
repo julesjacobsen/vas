@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("v1")
 public class VariantAnnotationServer {
 
+
     @RequestMapping("/")
     @ResponseBody
     public String root(){
