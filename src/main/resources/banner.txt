@@ -3,4 +3,4 @@
 | |/ / __ |_\ \  
 |___/_/ |_/___/  
                  
-Variant Annotation Server
+Variant Annotation Server v@project.version@
