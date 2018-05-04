@@ -11,11 +11,18 @@ import org.monarchinitiative.exomiser.core.model.frequency.FrequencyData;
 import org.monarchinitiative.exomiser.core.model.pathogenicity.PathogenicityData;
 import org.monarchinitiative.exomiser.core.proto.AlleleProto;
 import org.monarchinitiative.exomiser.core.proto.AlleleProto.AlleleProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * @author Jules Jacobsen <j.jacobsen@qmul.ac.uk>
  */
 public class VariantAnnotationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(VariantAnnotationService.class);
 
     private final VariantAnnotator variantAnnotator;
     private final MVMap<AlleleProto.AlleleKey, AlleleProperties> alleleMap;
@@ -26,14 +33,16 @@ public class VariantAnnotationService {
     }
 
     public AnnotatedVariant annotate(String contig, int pos, String ref, String alt){
-
+        logger.info("Received annotate request for {} {} {} {}", contig, pos, ref, alt);
+        Instant start = Instant.now();
         VariantAnnotation variantAnnotation = variantAnnotator.annotate(contig, pos, ref, alt);
-
+        logger.info("Annotation finished - fetching variant data");
         AlleleProperties alleleProperties = alleleMap.getOrDefault(MvStoreUtil.generateAlleleKey(variantAnnotation), AlleleProperties
                 .getDefaultInstance());
         FrequencyData frequencyData = AlleleProtoAdaptor.toFrequencyData(alleleProperties);
         PathogenicityData pathogenicityData = AlleleProtoAdaptor.toPathogenicityData(alleleProperties);
-
+        Instant end = Instant.now();
+        logger.info("Returning AnnotatedVariant - query time {} ms", Duration.between(start, end).toMillis());
         return AnnotatedVariant.from(variantAnnotation, frequencyData, pathogenicityData);
     }
 }
