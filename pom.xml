@@ -26,6 +26,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,16 +87,45 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
+            <!--<plugin>-->
+            <!--<groupId>com.spotify</groupId>-->
+            <!--<artifactId>dockerfile-maven-plugin</artifactId>-->
+            <!--<version>1.4.0</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>default</id>-->
+            <!--<goals>-->
+            <!--<goal>build</goal>-->
+            <!--<goal>push</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--<configuration>-->
+            <!--<repository>exomiser/${project.artifactId}</repository>-->
+            <!--<tag>${project.version}</tag>-->
+            <!--<buildArgs>-->
+            <!--<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
+            <!--</buildArgs>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.0</version>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.25.2</version>
                 <configuration>
-                    <repository>exomiser/${project.artifactId}</repository>
-                    <tag>${project.version}</tag>
-                    <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
+                    <dockerHost>http://127.0.0.1:2375</dockerHost>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <name>exomiser/vas</name>
+                            <build>
+                                <dockerFile>Dockerfile</dockerFile>
+                                <assembly>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                            </build>
+                        </image>
+                    </images>
                 </configuration>
             </plugin>
         </plugins>
