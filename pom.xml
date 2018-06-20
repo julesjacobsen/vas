@@ -13,13 +13,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.12.RELEASE</version>
+        <version>2.0.1.RELEASE</version>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <exomiser.version>10.1.0-SNAPSHOT</exomiser.version>
+        <exomiser.version>11.0.0-SNAPSHOT</exomiser.version>
     </properties>
 
     <dependencies>
