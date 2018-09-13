@@ -33,16 +33,16 @@ public class VariantAnnotationService {
     }
 
     public AnnotatedVariant annotate(String contig, int pos, String ref, String alt){
-        logger.info("Received annotate request for {} {} {} {}", contig, pos, ref, alt);
+        logger.debug("Received annotate request for {} {} {} {}", contig, pos, ref, alt);
         Instant start = Instant.now();
         VariantAnnotation variantAnnotation = variantAnnotator.annotate(contig, pos, ref, alt);
-        logger.info("Annotation finished - fetching variant data");
-        AlleleProperties alleleProperties = alleleMap.getOrDefault(MvStoreUtil.generateAlleleKey(variantAnnotation), AlleleProperties
+        logger.debug("Annotation finished - fetching variant data");
+        AlleleProperties alleleProperties = alleleMap.getOrDefault(AlleleProtoAdaptor.toAlleleKey(variantAnnotation), AlleleProperties
                 .getDefaultInstance());
         FrequencyData frequencyData = AlleleProtoAdaptor.toFrequencyData(alleleProperties);
         PathogenicityData pathogenicityData = AlleleProtoAdaptor.toPathogenicityData(alleleProperties);
         Instant end = Instant.now();
-        logger.info("Returning AnnotatedVariant - query time {} ms", Duration.between(start, end).toMillis());
+        logger.debug("Returning AnnotatedVariant - query time {} ms", Duration.between(start, end).toMillis());
         return AnnotatedVariant.from(variantAnnotation, frequencyData, pathogenicityData);
     }
 }
